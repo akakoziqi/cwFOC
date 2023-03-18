@@ -1,0 +1,13 @@
+# KiCAD 硬件部分
+bom/
+gerber/
+*-backups/
+fp-info-cache
+
+!*.kicad_sch
+!*.kicad_pcb
+!*.kicad_pro
+!*.kicad_prl
+
+build
+build_exec

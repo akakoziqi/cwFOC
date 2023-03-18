@@ -27,7 +27,7 @@
  * Include files
  ******************************************************************************/
 #include "main.h"
-
+#include "cw32f030_gpio.h"
 /******************************************************************************
  * Local pre-processor symbols/macros ('#define')
  ******************************************************************************/
@@ -73,6 +73,7 @@ int main(void)
     CW_GPIOA->ANALOG_f.PIN0 = 0U; // Digital
     CW_GPIOA->BRR_f.BRR0 = 1U;    // Reset PA00
     CW_GPIOA->DIR_f.PIN0 = 0U;    // Output
+
 
     while (1)
     {

@@ -416,7 +416,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "mmFOC.kicad_pro",
+    "filename": "cwFOC.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -511,6 +511,10 @@
     [
       "89ac2ee5-3a75-4dad-932f-07f3c050794c",
       "PSU"
+    ],
+    [
+      "50c76e34-9c76-4785-b3ad-3791bfa1e28e",
+      "RS485"
     ]
   ],
   "text_variables": {}

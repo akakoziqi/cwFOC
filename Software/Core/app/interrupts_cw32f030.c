@@ -15,7 +15,7 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+#include "app_main.h"
 #include "interrupts_cw32f030.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

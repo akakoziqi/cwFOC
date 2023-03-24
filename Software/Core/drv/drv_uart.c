@@ -2,6 +2,7 @@
 #include "cw32f030_uart.h"
 #include "cw32f030_dma.h"
 #include "cw32f030_gpio.h"
+#include "cw32f030_rcc.h"
 
 #define DEVICE_INST(d) ((UART_TypeDef *)(d))
 
@@ -14,6 +15,8 @@ static void uart3_gpio_init(void);
 static inline void uart2_gpio_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
+    RCC_AHBPeriphClk_Enable(RCC_AHB_PERIPH_GPIOA, ENABLE);
+    RCC_AHBPeriphClk_Enable(RCC_AHB_PERIPH_GPIOB, ENABLE);
 
     // UART TX RX 复用
     PB03_AFx_UART2TXD();
@@ -32,6 +35,7 @@ static inline void uart2_gpio_init(void)
 static inline void uart3_gpio_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
+    RCC_AHBPeriphClk_Enable(RCC_AHB_PERIPH_GPIOB, ENABLE);
 
     // UART TX RX 复用
     PB06_AFx_UART3TXD();
@@ -55,6 +59,7 @@ static inline void uart3_gpio_init(void)
 extern void drv_uart2_init(uint32_t baudrate)
 {
     USART_InitTypeDef USART_InitStructure;
+    RCC_APBPeriphClk_Enable1(RCC_APB1_PERIPH_UART2, ENABLE);
     uart2_gpio_init();
 
     USART_InitStructure.USART_BaudRate = baudrate;
@@ -72,6 +77,7 @@ extern void drv_uart2_init(uint32_t baudrate)
 extern void drv_uart3_init(uint32_t baudrate)
 {
     USART_InitTypeDef USART_InitStructure;
+    RCC_APBPeriphClk_Enable1(RCC_APB1_PERIPH_UART3, ENABLE);
     uart3_gpio_init();
 
     USART_InitStructure.USART_BaudRate = baudrate;
@@ -110,10 +116,50 @@ extern void drv_uart3_dma_init(void)
 
 extern inline void drv_uart3_dir_tx(void)
 {
-    GPIO_WritePin(CW_GPIOB, GPIO_PIN_5, GPIO_Pin_RESET);
+    GPIO_WritePin(CW_GPIOB, GPIO_PIN_5, GPIO_Pin_SET);
 }
 
 extern inline void drv_uart3_dir_rx(void)
 {
-    GPIO_WritePin(CW_GPIOB, GPIO_PIN_5, GPIO_Pin_SET);
+    GPIO_WritePin(CW_GPIOB, GPIO_PIN_5, GPIO_Pin_RESET);
+}
+
+extern void drv_uart_send_byte(UARTInstance UART_Instance, uint8_t byte)
+{
+    USART_SendData_8bit((UART_TypeDef *)UART_Instance, byte);
+}
+
+extern void drv_uart_rs485_send_byte(UARTInstance UART_Instance, uint8_t byte)
+{
+    drv_uart3_dir_tx();
+    USART_SendData_8bit((UART_TypeDef *)UART_Instance, byte);
+    drv_uart3_dir_rx();
+}
+
+extern void drv_uart_rs485_send_string(UARTInstance UART_Instance, char *string)
+{
+    drv_uart3_dir_tx();
+    while (*string != '\0')
+    {
+        USART_SendData_8bit((UART_TypeDef *)UART_Instance, (uint8_t)*string);
+        while (USART_GetFlagStatus((UART_TypeDef *)UART_Instance, USART_FLAG_TXE) == RESET)
+            ;
+        string++;
+    }
+    USART_ClearFlag((UART_TypeDef *)UART_Instance, USART_FLAG_TC);
+    while (USART_GetFlagStatus((UART_TypeDef *)UART_Instance, USART_FLAG_TC) != SET);
+    USART_ClearFlag((UART_TypeDef *)UART_Instance, USART_FLAG_TC);
+
+    drv_uart3_dir_rx();
+}
+
+extern void drv_uart_send_string(UARTInstance UART_Instance, char *string)
+{
+    while (*string != '\0')
+    {
+        USART_SendData_8bit((UART_TypeDef *)UART_Instance, (uint8_t)*string);
+        while (USART_GetFlagStatus((UART_TypeDef *)UART_Instance, USART_FLAG_TXE) == SET)
+            ;
+        string++;
+    }
 }

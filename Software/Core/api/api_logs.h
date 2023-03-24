@@ -1,6 +1,8 @@
 #ifndef __API_LOGS_H__
 #define __API_LOGS_H__
 
+#include "sys_inc.h"
+
 // 日志最大缓冲区
 #define LOG_BUFFER_MAX_SIZE (256) // Bytes
 // 日志等级

@@ -5,8 +5,10 @@
 C_SOURCES += $(wildcard $(Core_DIR)/app/*.c)
 C_SOURCES += $(wildcard $(Core_DIR)/api/*.c)
 C_SOURCES += $(wildcard $(Core_DIR)/drv/*.c)
+C_SOURCES += $(wildcard $(Core_DIR)/sys/*.c)
 
 # 向 C_INCLUDES 中添加头文件路径
 C_INCLUDES += -I$(Core_DIR)/app
 C_INCLUDES += -I$(Core_DIR)/api
 C_INCLUDES += -I$(Core_DIR)/drv
+C_INCLUDES += -I$(Core_DIR)/sys

@@ -1,8 +1,6 @@
 #include "api_logs.h"
 
 #include "drv_uart.h"
-#include <stdint.h>
-#include <stdarg.h>
 
 #define LOG_COLOR_NONE "\033[0m"
 #define LOG_COLOR_RED "\033[31m"
@@ -36,12 +34,12 @@ static const char *log_level_prefix[] =
 
 extern void api_logs_init(void)
 {
-    uart_print_init(115200);
+    drv_uart2_init(115200);
 }
 
 static inline void LOG_Print(char *buffer)
 {
-    printf("%s", buffer);
+    drv_uart_send_string(UART_Instance2, buffer);
 }
 
 static inline char *append2String(char *string, const char *append)

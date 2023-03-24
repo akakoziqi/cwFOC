@@ -4,7 +4,7 @@ TARGET = cwFOC
 # 调试信息
 DEBUG = 1
 # 优化等级
-OPT = -O3
+OPT = -O2
 # 链接时优化
 LTO = -flto
 
@@ -119,7 +119,7 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	@echo "[AS]    $<"
-	@$(AS) -c $(CFLAGS) $< -o $@
+	@$(AS) -c $(ASFLAGS) $< -o $@
 
 $(EXEC_DIR)/$(TARGET).elf: $(OBJECTS) Makefile | $(EXEC_DIR)
 	@echo "[LD]    $@"

@@ -3,6 +3,8 @@
 
 #include "sys_inc.h"
 
-
+extern void drv_as5600_init(void);
+extern uint16_t drv_as5600_read_raw_angle(void);
+extern float drv_as5600_read_angle(void);
 
 #endif

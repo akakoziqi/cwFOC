@@ -4,9 +4,16 @@
 #include "api_logs.h"
 #include "drv_uart.h"
 #include "drv_mp6540.h"
+#include "drv_as5600.h"
 #include "drv_atim.h"
+#include "app_foc.h"
+#include "drv_clock.h"
+#include "drv_adc.h"
 
-static const char* tag = "app_main";
+static const char *tag = "app_main";
+float angle_el = 0;
+uint16_t adc_value = 0;
+float vbus = 0;
 
 static inline void LED_Init()
 {
@@ -22,6 +29,7 @@ static inline void LED_Init()
 
 int main(void)
 {
+    drv_clock_pll();
     LED_Init();
     // 开启两线调试接口
     RCC_SWDIO_Config(RCC_SYSCTRL_SWDIOEN);
@@ -30,7 +38,13 @@ int main(void)
     drv_mp6540_init();
     drv_mp6540_sleep(false);
     drv_mp6540_enable(true);
-    drv_atim_init();
+    drv_as5600_init();
+    app_foc_init();
+    drv_adc_init();
+    FirmwareDelay(100000);
+
+    API_LOGI(tag, "HCLK:%ld", RCC_Sysctrl_GetHClkFreq());
+    API_LOGI(tag, "PCLK:%ld", RCC_Sysctrl_GetPClkFreq());
 
     while (1)
     {
@@ -38,7 +52,18 @@ int main(void)
         // drv_uart_rs485_send_byte(UART_Instance3, 'A');
         // drv_uart_rs485_send_string(UART_Instance3, "Akako test!\n");
         // USART_SendData_8bit(CW_UART2, 'A');
-        FirmwareDelay(100000);
+        // FirmwareDelay(100000);
+        adc_value = drv_as5600_read_raw_angle();
+
+        angle_el = (adc_value * 11) * (3.1415926535 * 2 / 4096);
+
+        app_foc_handle(4, 0, angle_el + (3.1415926535 * 0.3));
+
+        // vbus = drv_adc_get_vbus()/4096.0*2.5*6.041;
+
+        // API_LOGI(tag, "VBUS:%6ld", (uint32_t)(vbus*10000));
+
+        // API_LOGI(tag, "PCLK:%ld", RCC_Sysctrl_GetPClkFreq());
     }
 
     return 0;

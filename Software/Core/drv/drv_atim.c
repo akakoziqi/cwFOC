@@ -39,8 +39,8 @@ extern void drv_atim_init()
     ATIM_InitStruct.CounterDirection = ATIM_COUNTING_UP;
     ATIM_InitStruct.CounterOPMode = ATIM_OP_MODE_REPETITIVE;
     ATIM_InitStruct.OverFlowMask = DISABLE;
-    ATIM_InitStruct.Prescaler = ATIM_Prescaler_DIV1; // 计数时钟8MHz
-    ATIM_InitStruct.ReloadValue = 200;               // 频率40KHz
+    ATIM_InitStruct.Prescaler = ATIM_Prescaler_DIV1; // 计数时钟64MHz
+    ATIM_InitStruct.ReloadValue = 1000;               // 频率64KHz
     ATIM_InitStruct.RepetitionCounter = 0;
     ATIM_InitStruct.UnderFlowMask = ENABLE;
     ATIM_InitStruct.OverFlowMask = ENABLE;
@@ -59,9 +59,9 @@ extern void drv_atim_init()
     ATIM_OC3AInit(&ATIM_OCInitStruct);
 
 
-    ATIM_SetCompare1A(100-50);
-    ATIM_SetCompare2A(100);
-    ATIM_SetCompare3A(100+50);
+    ATIM_SetCompare1A(0);
+    ATIM_SetCompare2A(0);
+    ATIM_SetCompare3A(0);
 
     ATIM_Cmd(ENABLE);
     ATIM_CtrlPWMOutputs(ENABLE);

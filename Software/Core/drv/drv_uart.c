@@ -65,7 +65,7 @@ extern void drv_uart2_init(uint32_t baudrate)
     USART_InitStructure.USART_BaudRate = baudrate;
     USART_InitStructure.USART_Over = USART_Over_16;
     USART_InitStructure.USART_Source = USART_Source_PCLK;
-    USART_InitStructure.USART_UclkFreq = 8000000;
+    USART_InitStructure.USART_UclkFreq = 64000000;
     USART_InitStructure.USART_StartBit = USART_StartBit_FE;
     USART_InitStructure.USART_StopBits = USART_StopBits_1;
     USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -83,7 +83,7 @@ extern void drv_uart3_init(uint32_t baudrate)
     USART_InitStructure.USART_BaudRate = baudrate;
     USART_InitStructure.USART_Over = USART_Over_16;
     USART_InitStructure.USART_Source = USART_Source_PCLK;
-    USART_InitStructure.USART_UclkFreq = 8000000;
+    USART_InitStructure.USART_UclkFreq = 64000000;
     USART_InitStructure.USART_StartBit = USART_StartBit_FE;
     USART_InitStructure.USART_StopBits = USART_StopBits_1;
     USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -142,14 +142,10 @@ extern void drv_uart_rs485_send_string(UARTInstance UART_Instance, char *string)
     while (*string != '\0')
     {
         USART_SendData_8bit((UART_TypeDef *)UART_Instance, (uint8_t)*string);
-        while (USART_GetFlagStatus((UART_TypeDef *)UART_Instance, USART_FLAG_TXE) == RESET)
+        while (USART_GetFlagStatus((UART_TypeDef *)UART_Instance, USART_FLAG_TXBUSY) == SET)
             ;
         string++;
     }
-    USART_ClearFlag((UART_TypeDef *)UART_Instance, USART_FLAG_TC);
-    while (USART_GetFlagStatus((UART_TypeDef *)UART_Instance, USART_FLAG_TC) != SET);
-    USART_ClearFlag((UART_TypeDef *)UART_Instance, USART_FLAG_TC);
-
     drv_uart3_dir_rx();
 }
 
@@ -158,7 +154,7 @@ extern void drv_uart_send_string(UARTInstance UART_Instance, char *string)
     while (*string != '\0')
     {
         USART_SendData_8bit((UART_TypeDef *)UART_Instance, (uint8_t)*string);
-        while (USART_GetFlagStatus((UART_TypeDef *)UART_Instance, USART_FLAG_TXE) == SET)
+        while (USART_GetFlagStatus((UART_TypeDef *)UART_Instance, USART_FLAG_TXBUSY) == SET)
             ;
         string++;
     }

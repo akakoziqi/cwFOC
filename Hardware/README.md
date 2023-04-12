@@ -2,7 +2,7 @@
 
 本目录为 cwFOC 硬件设计存放目录，使用的 EDA 工具为 KiCAD
 
-原理图设计采用分层图框，顶层图框为`cwFOC.kicad_sch`
+原理图设计采用分层图框设计，顶层图框为 `cwFOC.kicad_sch`
 
 ## 硬件设计进度
 
@@ -12,7 +12,7 @@ Rev 1.0 已知问题：
 2. **泵升电压没有处理，容易导致电机驱动和 LDO 损坏！**
 3. 电流采样处有尖峰噪声
 
-Rev 1.1 计划：
+Rev 2.0 计划：
 
 1. 修正螺丝孔位
 2. 添加防反灌二极管及 TVS
@@ -36,7 +36,6 @@ Rev 1.1 计划：
 | PA10        | TIM1 CH3    | A 相 PWM 输出   |
 | PA11        | GPIO        | MP6540 EN      |
 | PA12        | GPIO        | MP6540 Sleep   |
-| PA1         | ADC IN1     | AS5600 模拟输入 |
 | PA2         | ADC IN2     | 母线电压测量     |
 | PA3         | ADC IN3     | C 相电流采样     |
 | PA4         | ADC IN4     | B 相电流采样     |
@@ -68,4 +67,14 @@ Rev 1.1 计划：
 
 成本总计：￥15
 
-## TODO
+## 快捷链接
+
+[AS5600 数据手册](../Docs/AMS-AS5600.pdf)
+
+[MP6540 数据手册](../Docs/MP6540.pdf)
+
+[MP6540 参考设计](../Docs/EV6540-U-00A.pdf)
+
+[CW32F030 数据手册](../Docs/PSMCU0003.pdf)
+
+[CW32F030 用户手册](../Docs/PSMCU0002.pdf)

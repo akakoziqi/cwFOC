@@ -1,4 +1,5 @@
-# KiCAD 硬件部分
+# 硬件部分
+sch/
 bom/
 gerber/
 *-backups/
@@ -9,6 +10,18 @@ fp-info-cache
 !*.kicad_pro
 !*.kicad_prl
 
-build
-build_exec
-.vscode/
+# 下位机部分
+controller/build/
+controller/build_exec/
+controller/.vscode/
+controller/Libraries/
+controller/Debug/
+controller/pyocd.yaml
+
+# 上位机部分
+hmi/build
+hmi/.vscode/
+hmi/Debug/
+
+# 文档部分
+datasheets/

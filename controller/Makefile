@@ -2,9 +2,9 @@
 TARGET = cwFOC
 
 # 调试信息
-DEBUG = 1
+DEBUG = 0
 # 优化等级
-OPT = -O2
+OPT = -Ofast
 # 链接时优化
 LTO = -flto
 
@@ -20,6 +20,10 @@ include Core/Core.mk
 # 芯片厂商代码库
 Libraries_DIR = Libraries
 include Libraries/Libraries.mk
+
+# # 第三方库
+# ThirdParty_Lib_DIR = ThirdParty_Lib
+# include ThirdParty_Lib/ThirdParty_Lib.mk
 
 
 # C源文件宏定义
@@ -139,15 +143,25 @@ $(BUILD_DIR):
 $(EXEC_DIR):
 	@mkdir $@
 
+#######################################
+# POST_BUILD
+#######################################
 .PHONY: POST_BUILD
 POST_BUILD: $(EXEC_DIR)/$(TARGET).elf
-ifeq ($(DEBUG), 1)
 	@echo "[DUMP]  $< -> $(EXEC_DIR)/$(TARGET).s"
 	@$(DUMP) -d $< > $(EXEC_DIR)/$(TARGET).s
-endif
+
 	@echo "[SIZE]  $<"
 	@$(SZ) $<
 	@echo -e "$(OK_COLOR)Build Finish$(NO_COLOR)"
+	
+#######################################
+# 构建标准库
+#######################################
+.PHONY: lib
+lib:
+	@make -C $(Libraries_DIR)
+	@echo -e "$(OK_COLOR)Build Lib Finish$(NO_COLOR)"
 
 #######################################
 # 清除临时文件

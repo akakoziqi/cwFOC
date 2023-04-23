@@ -15,13 +15,15 @@ controller/build/
 controller/build_exec/
 controller/.vscode/
 controller/Libraries/
+controller/ThirdParty_Lib/
 controller/Debug/
 controller/pyocd.yaml
 
 # 上位机部分
-hmi/build
+hmi/build*
 hmi/.vscode/
 hmi/Debug/
+*.pro.user
 
 # 文档部分
 datasheets/

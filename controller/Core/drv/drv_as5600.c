@@ -45,11 +45,6 @@
 #define AS5600_REG_BURN (0XFF)
 #define AS5600_RESOLUTION (4096)
 
-#define abs(x) ((x) > 0 ? (x) : -(x))
-#define _2PI 6.28318530718
-
-static float angle_data_prev;      // 上次位置
-static float full_rotation_offset; // 转过的整圈数
 
 const char tag[] = "AS5600";
 
@@ -77,18 +72,4 @@ extern uint16_t drv_as5600_read_raw_angle(void)
     // API_LOGI(tag, "angle = %d", angle);
 
     return angle;
-}
-
-extern float drv_as5600_read_angle(void)
-{
-    float angle_data = drv_as5600_read_raw_angle();
-
-    float d_angle = angle_data - angle_data_prev;
-    if (abs(d_angle) > (0.8 * AS5600_RESOLUTION))
-    {
-        full_rotation_offset += (d_angle > 0 ? -_2PI : _2PI);
-    }
-    angle_data_prev = angle_data;
-
-    return (full_rotation_offset + (angle_data / (float)AS5600_RESOLUTION) * _2PI);
 }

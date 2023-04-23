@@ -30,9 +30,10 @@
 #ifndef __APP_FOC_H__
 #define __APP_FOC_H__
 
+#include "utl_ffpm.h"
 
 extern void app_foc_init();
-extern void app_foc_handle(float Uq, float Ud, float angle_el);
+extern void app_foc_handle(fq12_t Uq, fq12_t Ud, fq12_t angle_el);
 
 
 #endif

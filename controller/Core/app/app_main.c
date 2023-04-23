@@ -38,11 +38,12 @@
 #include "app_foc.h"
 #include "drv_clock.h"
 #include "drv_adc.h"
+#include "utl_ffpm.h"
 
 static const char *tag = "app_main";
-float angle_el = 0;
-uint16_t adc_value = 0;
-float vbus = 0;
+fq12_t angle_el = 0;
+fq12_t angle_mac = 0;
+fq12_t vbus = 0;
 
 static inline void LED_Init()
 {
@@ -82,11 +83,12 @@ int main(void)
         // drv_uart_rs485_send_string(UART_Instance3, "Akako test!\n");
         // USART_SendData_8bit(CW_UART2, 'A');
         // FirmwareDelay(100000);
-        adc_value = drv_as5600_read_raw_angle();
+        angle_mac = drv_as5600_read_raw_angle();
 
-        angle_el = (adc_value * 11) * (3.1415926535 * 2 / 4096);
+        angle_el = fmul(fmul(angle_mac, FQ12_2PI), 11) + TO_FQ12(FP64_PI * 0.3);
+        // angle_el = (angle_mac * 11) * (3.1415926535 * 2 / 4096);
 
-        app_foc_handle(4, 0, angle_el + (3.1415926535 * 0.3));
+        app_foc_handle(TO_FQ12(4), TO_FQ12(0), angle_el);
 
         // vbus = drv_adc_get_vbus()/4096.0*2.5*6.041;
 
@@ -108,6 +110,5 @@ int main(void)
  */
 void assert_failed(uint8_t *file, uint32_t line)
 {
-
 }
 #endif

@@ -30,6 +30,6 @@
 #ifndef __SYS_DEF_H__
 #define __SYS_DEF_H__
 
-
+#define forceinline __inline__ __attribute__((always_inline))
 
 #endif
